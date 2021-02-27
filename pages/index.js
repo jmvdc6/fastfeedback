@@ -1,65 +1,68 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import { Button, Box, Flex, Text, Link } from '@chakra-ui/react';
+import { useAuth } from '@/lib/auth';
+import { Logo } from '@/icons/icons';
+import LoginButtons from '@/components/LoginButtons';
 
 export default function Home() {
+  const auth = useAuth();
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
+    <Box bg="gray.100">
+      <Flex
+        as="main"
+        direction="column"
+        align="center"
+        justify="center"
+        h="100vh"
+        maxW="500px"
+        margin="0 auto"
+      >
+        <Head>
+          <title>Fast Feedback</title>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `if(document.cookie && document.cookie.includes('fast-feedback-auth')){
+              window.location.href = "/dashboard"
+            }`
+            }}
+          />
+        </Head>
+        <Logo boxSize="42px" />
+        <Text mb={4} fontSize="lg" p={6}>
+          <Text as="span" fontWeight="bold">
+            Fast Feedback
+          </Text>
+          {' is being built as part of '}
+          <Link
+            href="https://react2025.com"
+            isExternal
+            textDecoration="underline"
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
+            React 2025
+          </Link>
+          {`. It's the easiest way to add comments or reviews to your static stie. it's still a work-in-progress, but you can try it out by logging in.`}
+        </Text>
+        {auth.user ? (
+          <Button
+            as="a"
+            href="/dashboard"
+            backgroundColor="white"
+            color="gray.900"
+            variant="outline"
+            fontWeight="bold"
+            mt={4}
+            _hover={{ bg: 'gray.100' }}
+            _active={{
+              bg: 'gray.100',
+              transform: 'scale(0.95)'
+            }}
           >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+            View Dashboard
+          </Button>
+        ) : (
+          <LoginButtons />
+        )}
+      </Flex>
+    </Box>
+  );
 }
